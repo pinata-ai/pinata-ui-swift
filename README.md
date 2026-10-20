@@ -1,6 +1,16 @@
-# Pinata UI iOS mock
+# pinata-ui-swift
 
-Throwaway mock, not the SDK. A bare `WKWebView` around the [Partner UI Demo Site](https://github.com/pinata-ai/Partner-UI-Demo-Site), the iOS twin of `pinata-ui-android-mock`, so we can show the marketplace components (wallet, preview, full shopping) running inside a native iOS app and the events reaching it.
+iOS SDK for the Pinata marketplace components, the Swift twin of
+[pinata-ui-kotlin](https://github.com/pinata-ai/pinata-ui-kotlin). The goal is the same public
+surface: one view per component (`Wallet`, `Preview`, `FullShopping`) wrapping the pinata-ui web
+components in a `WKWebView` with event mode on by default, typed callbacks for
+`pinata-marketplace-open`, and `SFSafariViewController` for `window.open` targets.
+
+The real SDK is not written yet (it needs a Mac). What follows is the PoC mock this repo starts
+from: a bare `WKWebView` around the [Partner UI Demo Site](https://github.com/pinata-ai/Partner-UI-Demo-Site),
+proving the components render in `WKWebView` and the events reach native code.
+
+## The mock (current content)
 
 What it should prove (written on Windows, not yet run on a Mac): the web bundle renders in `WKWebView` as is; deals, account settings and "open marketplace" (which use `window.open()`) open in `SFSafariViewController`; and what the components already emit reaches the app, shown as a toast: messages posted to the top window (`pinata-embed-ready`, `pinata-preview-browse-marketplace` from the anonymous wallet CTA) and top-level redirects (`ctaUrlRedirect` from the authenticated wallet CTA). The real SDK is specified in the spike (`spike-native-webview/`).
 
