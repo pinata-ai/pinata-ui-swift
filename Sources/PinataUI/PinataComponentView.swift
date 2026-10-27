@@ -9,7 +9,7 @@ import WebKit
 ///
 /// Configure the properties, then call `load()`. The component reads them on load only;
 /// to change them afterwards, set and call `load()` again. The view is single-use: once
-/// removed from the window it destroys its web view, so create a new instance to show it again.
+/// removed from its superview it destroys its web view, so create a new instance to show it again.
 open class PinataComponentView: UIView {
 
   var componentTag: String { fatalError("Subclasses define the web component tag") }
