@@ -9,5 +9,6 @@ let package = Package(
   ],
   targets: [
     .target(name: "PinataUI"),
+    .testTarget(name: "PinataUITests", dependencies: ["PinataUI"]),
   ]
 )
