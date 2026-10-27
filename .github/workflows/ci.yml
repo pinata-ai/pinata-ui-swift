@@ -11,8 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo xcode-select -s /Applications/Xcode_16.4.app
-      - name: Build the package
-        run: xcodebuild build -scheme PinataUI -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO
+      - name: Test the package
+        run: xcodebuild test -scheme PinataUI -destination 'platform=iOS Simulator,name=iPhone 16' CODE_SIGNING_ALLOWED=NO
       - name: Build the example app
         run: |
           brew install xcodegen
