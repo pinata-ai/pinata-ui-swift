@@ -19,10 +19,14 @@ open class PinataComponentView: UIView {
   public var environment: PinataEnvironment = .production
   public var userToken: String?
   public var companyName: String?
-  /// Escape hatch for `customization` keys the SDK does not type.
+  /// Escape hatch for `customization` keys the SDK does not type yet; typed values win.
   public var extraCustomization: [String: Any] = [:]
   public var onMarketplaceOpen: ((MarketplaceOpenEvent) -> Void)?
   public var onError: ((String) -> Void)?
+  /// Full Shopping consumed a deep link (or the renter declined the consent holding it).
+  public var onDetailsConsumed: (() -> Void)?
+  /// Raw passthrough of every message, for events the SDK does not type (RN parity).
+  public var onMessage: ((String) -> Void)?
 
   let webView: WKWebView = {
     let configuration = WKWebViewConfiguration()
@@ -85,12 +89,15 @@ open class PinataComponentView: UIView {
   }
 
   fileprivate func handleBridgeMessage(_ data: String) {
+    onMessage?(data)
     guard data.hasPrefix("{"),
       let object = try? JSONSerialization.jsonObject(with: Data(data.utf8)) as? [String: Any]
     else { return }
     switch object["type"] as? String {
     case "pinata-marketplace-open":
       onMarketplaceOpen?(.fromJSON(object))
+    case "pinata-embed-details-consumed":
+      onDetailsConsumed?()
     case "pinata-error":
       onError?(Self.errorDetail(object["detail"]))
     default:

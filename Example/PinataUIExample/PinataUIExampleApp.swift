@@ -70,7 +70,13 @@ struct ContentView: View {
   private func componentView(for screen: Screen) -> some View {
     switch screen {
     case .walletAnonymous:
-      PinataComponent { configured(PinataMarketplaceWalletView(), userToken: nil) }
+      PinataComponent {
+        let view = PinataMarketplaceWalletView()
+        // Exercises the typed customization end to end.
+        view.customization.ctaText = "Open the marketplace"
+        view.customization.colorScheme.primaryColor = "#0A7E5C"
+        return configured(view, userToken: nil)
+      }
     case .walletLoggedIn:
       PinataComponent { configured(PinataMarketplaceWalletView(), userToken: Demo.token) }
     case .previewLoggedIn:
@@ -99,6 +105,7 @@ struct ContentView: View {
       path.append(.fullShopping(detailsId: event.detailsId, detailsType: event.detailsType))
     }
     view.onError = { message in toast = "pinata-error: \(message)" }
+    view.onDetailsConsumed = { toast = "Deep link consumed" }
     return view
   }
 }

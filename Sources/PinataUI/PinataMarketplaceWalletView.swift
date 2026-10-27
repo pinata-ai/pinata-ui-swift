@@ -6,4 +6,8 @@ import UIKit
 public final class PinataMarketplaceWalletView: PinataComponentView {
 
   override var componentTag: String { "pinata-marketplace-wallet" }
+
+  public var customization = WalletCustomization()
+
+  override func componentCustomization() -> [String: Any]? { customization.toJSON() }
 }

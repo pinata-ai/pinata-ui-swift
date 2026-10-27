@@ -8,8 +8,11 @@ public final class PinataFullShoppingView: PinataComponentView {
   override var componentTag: String { "pinata-marketplace-full-shopping" }
   override var usesEventMode: Bool { false }
 
+  public var customization = FullShoppingCustomization()
   public var detailsId: String?
   public var detailsType: String?
+
+  override func componentCustomization() -> [String: Any]? { customization.toJSON() }
 
   override func buildCustomization() -> [String: Any] {
     var json = super.buildCustomization()
