@@ -8,7 +8,8 @@ import WebKit
 /// (deals, full Pinata account) open in `SFSafariViewController`.
 ///
 /// Configure the properties, then call `load()`. The component reads them on load only;
-/// to change them afterwards, set and call `load()` again.
+/// to change them afterwards, set and call `load()` again. The view is single-use: once
+/// removed from the window it destroys its web view, so create a new instance to show it again.
 open class PinataComponentView: UIView {
 
   var componentTag: String { fatalError("Subclasses define the web component tag") }
@@ -33,6 +34,8 @@ open class PinataComponentView: UIView {
   private let bridge = Bridge()
   /// Web views handed to window.open(); kept until their first navigation is sent to Safari.
   fileprivate var popups: [WKWebView] = []
+  private var hasBeenInWindow = false
+  private var destroyed = false
 
   public override init(frame: CGRect) {
     super.init(frame: frame)
@@ -58,7 +61,27 @@ open class PinataComponentView: UIView {
   }
 
   public func load() {
+    if destroyed {
+      onError?("This view was removed from the window and destroyed; create a new instance.")
+      return
+    }
     webView.loadHTMLString(buildHostPage(), baseURL: environment.baseURL)
+  }
+
+  // The view is single-use, like the web component: once it leaves the window, create a new instance.
+  open override func didMoveToWindow() {
+    super.didMoveToWindow()
+    if window != nil {
+      hasBeenInWindow = true
+      return
+    }
+    guard hasBeenInWindow, !destroyed else { return }
+    destroyed = true
+    webView.stopLoading()
+    webView.navigationDelegate = nil
+    webView.uiDelegate = nil
+    webView.configuration.userContentController.removeScriptMessageHandler(forName: "PinataBridge")
+    webView.removeFromSuperview()
   }
 
   fileprivate func handleBridgeMessage(_ data: String) {
@@ -69,9 +92,19 @@ open class PinataComponentView: UIView {
     case "pinata-marketplace-open":
       onMarketplaceOpen?(.fromJSON(object))
     case "pinata-error":
-      onError?(object["detail"] as? String ?? "")
+      onError?(Self.errorDetail(object["detail"]))
     default:
       break
+    }
+  }
+
+  /// `detail` is whatever pinata-ui put in the CustomEvent: a string or an object (kept as JSON).
+  static func errorDetail(_ detail: Any?) -> String {
+    switch detail {
+    case nil, is NSNull: return ""
+    case let string as String: return string
+    case let object? where JSONSerialization.isValidJSONObject(object): return HostPage.serialize(object)
+    case let other?: return "\(other)"
     }
   }
 
