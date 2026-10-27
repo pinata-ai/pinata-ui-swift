@@ -6,4 +6,8 @@ import UIKit
 public final class PinataMarketplacePreviewView: PinataComponentView {
 
   override var componentTag: String { "pinata-marketplace-preview" }
+
+  public var customization = PreviewCustomization()
+
+  override func componentCustomization() -> [String: Any]? { customization.toJSON() }
 }

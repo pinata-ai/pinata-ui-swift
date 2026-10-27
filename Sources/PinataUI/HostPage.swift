@@ -64,7 +64,7 @@ enum HostPage {
   /// Compact JSON with sorted keys, so the output is stable across runs.
   static func serialize(_ json: Any) -> String {
     guard JSONSerialization.isValidJSONObject(json),
-      let data = try? JSONSerialization.data(withJSONObject: json, options: [.sortedKeys]),
+      let data = try? JSONSerialization.data(withJSONObject: json, options: [.sortedKeys, .withoutEscapingSlashes]),
       let string = String(data: data, encoding: .utf8)
     else { return "{}" }
     return string
