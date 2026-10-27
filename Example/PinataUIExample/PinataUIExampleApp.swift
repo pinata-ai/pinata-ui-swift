@@ -59,7 +59,8 @@ struct ContentView: View {
           .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
           .padding()
           .task(id: toast) {
-            try? await Task.sleep(for: .seconds(3))
+            // A newer toast cancels this task; only an elapsed timer clears the overlay.
+            guard (try? await Task.sleep(for: .seconds(3))) != nil else { return }
             self.toast = nil
           }
       }

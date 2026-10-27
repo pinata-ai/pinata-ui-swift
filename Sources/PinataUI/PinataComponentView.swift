@@ -38,7 +38,6 @@ open class PinataComponentView: UIView {
   private let bridge = Bridge()
   /// Web views handed to window.open(); kept until their first navigation is sent to Safari.
   fileprivate var popups: [WKWebView] = []
-  private var hasBeenInWindow = false
   private var destroyed = false
 
   public override init(frame: CGRect) {
@@ -66,20 +65,18 @@ open class PinataComponentView: UIView {
 
   public func load() {
     if destroyed {
-      onError?("This view was removed from the window and destroyed; create a new instance.")
+      onError?("This view was removed from its superview and destroyed; create a new instance.")
       return
     }
     webView.loadHTMLString(buildHostPage(), baseURL: environment.baseURL)
   }
 
-  // The view is single-use, like the web component: once it leaves the window, create a new instance.
-  open override func didMoveToWindow() {
-    super.didMoveToWindow()
-    if window != nil {
-      hasBeenInWindow = true
-      return
-    }
-    guard hasBeenInWindow, !destroyed else { return }
+  // Single use, like the web component: once the host removes the view, create a new instance.
+  // Leaving the window is not removal: a screen pushed over this one keeps it alive, so going
+  // back shows it as it was (as in the RN library, where the previous screen stays mounted).
+  open override func didMoveToSuperview() {
+    super.didMoveToSuperview()
+    guard superview == nil, !destroyed else { return }
     destroyed = true
     webView.stopLoading()
     webView.navigationDelegate = nil
