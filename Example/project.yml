@@ -1,0 +1,36 @@
+name: PinataUIExample
+options:
+  bundleIdPrefix: com.pinata
+  deploymentTarget:
+    iOS: "16.0"
+packages:
+  PinataUI:
+    path: ..
+targets:
+  PinataUIExample:
+    type: application
+    platform: iOS
+    sources: [PinataUIExample]
+    dependencies:
+      - package: PinataUI
+    info:
+      path: PinataUIExample/Info.plist
+      properties:
+        CFBundleDisplayName: Pinata UI example
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pinata.uiexample
+        TARGETED_DEVICE_FAMILY: "1"
+schemes:
+  PinataUIExample:
+    build:
+      targets:
+        PinataUIExample: all
+    run:
+      # Demo only. Set the token here (Edit Scheme > Run > Arguments) or leave it empty for anonymous.
+      environmentVariables:
+        PINATA_DEMO_ENV: dev
+        PINATA_DEMO_TOKEN: ""
