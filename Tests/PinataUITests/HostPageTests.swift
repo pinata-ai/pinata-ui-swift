@@ -74,6 +74,14 @@ final class HostPageTests: XCTestCase {
     XCTAssertTrue(page.contains("pinata-error"))
   }
 
+  func testHostPageSendsTheMessageOfErrorObjectsInsteadOfAnEmptyJson() {
+    let page = HostPage.buildHostPage(
+      scriptURL: URL(string: "https://static.pinata.ai/x.js")!,
+      componentTag: "pinata-marketplace-wallet", elementAttributes: "")
+    XCTAssertTrue(
+      page.contains("detail: e.detail instanceof Error ? e.detail.message : e.detail == null ? \"\" : e.detail"))
+  }
+
   func testSlashesInValuesAreNotEscaped() {
     XCTAssertEqual(HostPage.serialize(["url": "https://example.com/faq"]), "{\"url\":\"https://example.com/faq\"}")
   }

@@ -44,7 +44,7 @@ enum HostPage {
       addEventListener("message", e => webkit.messageHandlers.PinataBridge.postMessage(JSON.stringify(e.data)));
       addEventListener("DOMContentLoaded", () =>
         document.body.firstElementChild.addEventListener("pinata-error", e =>
-          webkit.messageHandlers.PinataBridge.postMessage(JSON.stringify({type: "pinata-error", detail: e.detail == null ? "" : e.detail}))));
+          webkit.messageHandlers.PinataBridge.postMessage(JSON.stringify({type: "pinata-error", detail: e.detail instanceof Error ? e.detail.message : e.detail == null ? "" : e.detail}))));
     </script>
     </head>
     <body>
