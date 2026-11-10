@@ -20,8 +20,4 @@ public final class PinataFullShoppingView: PinataComponentView {
     if let detailsType { json["detailsType"] = detailsType }
     return json
   }
-
-  override func elementAttributes() -> String {
-    " useFixedHeight=\"false\"" + super.elementAttributes()
-  }
 }
