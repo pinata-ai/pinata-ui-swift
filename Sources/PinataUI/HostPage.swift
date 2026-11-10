@@ -25,7 +25,7 @@ enum HostPage {
     userToken: String?,
     customization: [String: Any]
   ) -> String {
-    var attributes = ""
+    var attributes = " useFixedHeight=\"false\""
     if let element = environment.elementEnvironment { attributes += " environment=\"\(element)\"" }
     if let userToken { attributes += " usertoken=\"\(escapeAttribute(userToken))\"" }
     attributes += " customization='\(escapeAttribute(serialize(customization)))'"

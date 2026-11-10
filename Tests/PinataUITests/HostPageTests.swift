@@ -42,6 +42,12 @@ final class HostPageTests: XCTestCase {
         .contains("environment="))
   }
 
+  func testEveryComponentFillsItsViewInsteadOfTheFixed70dvhBox() {
+    XCTAssertTrue(
+      HostPage.buildElementAttributes(environment: .production, userToken: nil, customization: [:])
+        .hasPrefix(" useFixedHeight=\"false\""))
+  }
+
   func testUserTokenIsEscapedForTheAttribute() {
     let attributes = HostPage.buildElementAttributes(
       environment: .production, userToken: "a\"b'c&d", customization: [:])
