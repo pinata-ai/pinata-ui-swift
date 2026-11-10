@@ -25,6 +25,8 @@ open class PinataComponentView: UIView {
   public var onError: ((String) -> Void)?
   /// Full Shopping consumed a deep link (or the renter declined the consent holding it).
   public var onDetailsConsumed: (() -> Void)?
+  /// The Wallet's content height in points, on render and every time it changes.
+  public var onContentHeight: ((CGFloat) -> Void)?
   /// Raw passthrough of every message, for events the SDK does not type (RN parity).
   public var onMessage: ((String) -> Void)?
 
@@ -85,7 +87,7 @@ open class PinataComponentView: UIView {
     webView.removeFromSuperview()
   }
 
-  fileprivate func handleBridgeMessage(_ data: String) {
+  func handleBridgeMessage(_ data: String) {
     onMessage?(data)
     guard data.hasPrefix("{"),
       let object = try? JSONSerialization.jsonObject(with: Data(data.utf8)) as? [String: Any]
@@ -97,6 +99,8 @@ open class PinataComponentView: UIView {
       onDetailsConsumed?()
     case "pinata-error":
       onError?(Self.errorDetail(object["detail"]))
+    case "pinata-content-height":
+      if let height = object["height"] as? NSNumber { onContentHeight?(CGFloat(truncating: height)) }
     default:
       break
     }

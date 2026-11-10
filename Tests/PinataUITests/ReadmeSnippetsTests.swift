@@ -13,7 +13,7 @@ final class ReadmeSnippetsTests: XCTestCase {
       .compactMap { $0.components(separatedBy: "\n```").first }
       .filter { !$0.hasPrefix("// Package.swift") }
 
-    XCTAssertEqual(blocks.count, 3)
+    XCTAssertEqual(blocks.count, 4)
     for block in blocks {
       XCTAssertTrue(snippets.contains(block), "README block missing from ReadmeSnippets.swift:\n\(block)")
     }

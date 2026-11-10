@@ -115,6 +115,37 @@ struct WalletScreen: UIViewRepresentable {
 }
 ```
 
+To show the Wallet as a card that is as tall as its content (for example in a scrolling screen),
+set its height from `onContentHeight`:
+
+```swift
+import PinataUI
+import UIKit
+
+final class WalletCardViewController: UIViewController {
+  var token: String?
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    let wallet = PinataMarketplaceWalletView()
+    wallet.translatesAutoresizingMaskIntoConstraints = false
+    wallet.environment = .sandbox
+    wallet.userToken = token
+    view.addSubview(wallet)
+
+    let height = wallet.heightAnchor.constraint(equalToConstant: 350)
+    NSLayoutConstraint.activate([
+      wallet.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+      wallet.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+      wallet.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+      height,
+    ])
+    wallet.onContentHeight = { contentHeight in height.constant = contentHeight }
+    wallet.load()
+  }
+}
+```
+
 ## Events
 
 `MarketplaceOpenEvent` has `source`, `authenticated`, `detailsId`, `detailsType` and `entryPoint`.
@@ -131,6 +162,7 @@ Pass `detailsId` and `detailsType` to `PinataFullShoppingView` as they are. Othe
 | Callback | Called when |
 | --- | --- |
 | `onDetailsConsumed` (Full Shopping) | The item passed in `detailsId` was opened, or the renter declined the consent screen that comes before it |
+| `onContentHeight` (Wallet) | The Wallet rendered or its height changed. Receives the height of its content in points |
 | `onError` | The component reports an error while loading (for example an invalid or expired `userToken`), or `load()` is called on a destroyed view |
 | `onMessage` | Every message the component posts, as a raw JSON string, also the ones that have a typed callback |
 
@@ -154,7 +186,8 @@ Keys the SDK does not type yet go in `extraCustomization` (a `[String: Any]`). T
 - **Environments:** `.production` (default) and `.sandbox` for testing. Use tokens from the same
   environment.
 - **Size:** the component fills the view. Give the view a frame or constraints, as with any
-  `UIView`.
+  `UIView`. The Wallet reports the height of its content through `onContentHeight`, so you can
+  size it to fit; the Preview and Full Shopping do not.
 - **Properties are read by `load()`.** To change them later, set them and call `load()` again.
 - **Single use:** when the view is removed from its superview it destroys its `WKWebView`. To
   show the component again, create a new instance. A screen pushed on top of it does not remove
