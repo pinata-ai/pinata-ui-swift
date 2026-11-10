@@ -13,7 +13,7 @@ Requires iOS 15 or higher. The package is distributed with Swift Package Manager
 this repository.
 
 In Xcode: File > Add Package Dependencies, enter `https://github.com/pinata-ai/pinata-ui-swift`,
-keep the rule "Up to Next Major Version" from `0.1.1`, and add the `PinataUI` product to your app
+keep the rule "Up to Next Major Version" from `0.2.0`, and add the `PinataUI` product to your app
 target.
 
 In a `Package.swift`:
@@ -21,7 +21,7 @@ In a `Package.swift`:
 ```swift
 // Package.swift
 dependencies: [
-  .package(url: "https://github.com/pinata-ai/pinata-ui-swift.git", from: "0.1.1")
+  .package(url: "https://github.com/pinata-ai/pinata-ui-swift.git", from: "0.2.0")
 ],
 targets: [
   .target(name: "YourApp", dependencies: [.product(name: "PinataUI", package: "pinata-ui-swift")])
