@@ -22,6 +22,17 @@ final class LifecycleTests: XCTestCase {
     XCTAssertNotNil(view.webView.superview)
   }
 
+  func testContentHeightMessageReachesTheCallback() {
+    let view = PinataMarketplaceWalletView()
+    var heights: [CGFloat] = []
+    view.onContentHeight = { heights.append($0) }
+
+    view.handleBridgeMessage("{\"type\":\"pinata-content-height\",\"height\":323}")
+    view.handleBridgeMessage("{\"type\":\"pinata-content-height\"}")
+
+    XCTAssertEqual(heights, [323])
+  }
+
   func testRemovingTheViewDestroysIt() {
     let screen = UIView()
     let view = PinataMarketplaceWalletView()

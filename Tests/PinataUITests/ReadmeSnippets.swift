@@ -43,6 +43,32 @@ final class WalletViewController: UIViewController {
 }
 
 import PinataUI
+import UIKit
+
+final class WalletCardViewController: UIViewController {
+  var token: String?
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    let wallet = PinataMarketplaceWalletView()
+    wallet.translatesAutoresizingMaskIntoConstraints = false
+    wallet.environment = .sandbox
+    wallet.userToken = token
+    view.addSubview(wallet)
+
+    let height = wallet.heightAnchor.constraint(equalToConstant: 350)
+    NSLayoutConstraint.activate([
+      wallet.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+      wallet.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+      wallet.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+      height,
+    ])
+    wallet.onContentHeight = { contentHeight in height.constant = contentHeight }
+    wallet.load()
+  }
+}
+
+import PinataUI
 import SwiftUI
 
 struct WalletScreen: UIViewRepresentable {

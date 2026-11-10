@@ -73,6 +73,8 @@ public struct WalletCustomization {
   public var ctaText: String?
   public var disabledCta: Bool?
   public var helperText: String?
+  /// `false` keeps the title and the points in one row on narrow widths instead of stacking them.
+  public var stackHeaderOnNarrow: Bool?
   /// Text link under the header; both are needed for it to show.
   public var descriptionCopy: String?
   public var descriptionUrl: String?
@@ -88,6 +90,7 @@ public struct WalletCustomization {
       "ctaText": ctaText,
       "disabledCta": disabledCta,
       "helperText": helperText,
+      "stackHeaderOnNarrow": stackHeaderOnNarrow,
       "description": json(["copy": descriptionCopy, "url": descriptionUrl]),
       "companyName": companyName,
       "currentPageUrl": currentPageUrl,

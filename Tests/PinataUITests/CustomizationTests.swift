@@ -24,6 +24,12 @@ final class CustomizationTests: XCTestCase {
     XCTAssertTrue(FullShoppingCustomization().toJSON().isEmpty)
   }
 
+  func testWalletSendsStackHeaderOnNarrowOnlyWhenSet() throws {
+    var customization = WalletCustomization()
+    customization.stackHeaderOnNarrow = false
+    XCTAssertEqual(try XCTUnwrap(customization.toJSON())["stackHeaderOnNarrow"] as? Bool, false)
+  }
+
   func testWalletDescriptionNeedsItsOwnObject() throws {
     var customization = WalletCustomization()
     customization.descriptionCopy = "How do points work?"
