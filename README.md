@@ -187,7 +187,8 @@ Keys the SDK does not type yet go in `extraCustomization` (a `[String: Any]`). T
   environment.
 - **Size:** the component fills the view. Give the view a frame or constraints, as with any
   `UIView`. The Wallet reports the height of its content through `onContentHeight`, so you can
-  size it to fit; the Preview and Full Shopping do not.
+  size it to fit; the Preview and Full Shopping do not. With the callback set, a Wallet narrower
+  than about 384pt shows its offer in the narrow layout (image on top), which is taller.
 - **Properties are read by `load()`.** To change them later, set them and call `load()` again.
 - **Single use:** when the view is removed from its superview it destroys its `WKWebView`. To
   show the component again, create a new instance. A screen pushed on top of it does not remove

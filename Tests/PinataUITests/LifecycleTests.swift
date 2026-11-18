@@ -22,9 +22,13 @@ final class LifecycleTests: XCTestCase {
     XCTAssertNotNil(view.webView.superview)
   }
 
-  func testWalletAsksTheComponentToFollowItsWidth() {
-    let customization = PinataMarketplaceWalletView().componentCustomization()
-    XCTAssertEqual(customization?["observeWidth"] as? Bool, true)
+  func testWalletFollowsItsWidthOnlyWhenSizedFromTheContentHeight() {
+    let view = PinataMarketplaceWalletView()
+    XCTAssertNil(view.componentCustomization())
+
+    view.onContentHeight = { _ in }
+
+    XCTAssertEqual(view.componentCustomization()?["observeWidth"] as? Bool, true)
   }
 
   func testContentHeightMessageReachesTheCallback() {
