@@ -10,6 +10,7 @@ public final class PinataMarketplaceWalletView: PinataComponentView {
   public var customization = WalletCustomization()
 
   override func componentCustomization() -> [String: Any]? {
-    (customization.toJSON() ?? [:]).merging(["observeWidth": true]) { _, sdk in sdk }
+    guard onContentHeight != nil else { return customization.toJSON() }
+    return (customization.toJSON() ?? [:]).merging(["observeWidth": true]) { _, sdk in sdk }
   }
 }
