@@ -146,11 +146,21 @@ public struct BrowseMarketplaceLabels {
 }
 
 public struct WalletCardLabels {
+  public var description: String?
   public var accessAccountCta: String?
+  public var accountModalTitle: String?
+  public var accountModalSecondaryCta: String?
 
   public init() {}
 
-  func toJSON() -> [String: Any]? { json(["accessAccountCta": accessAccountCta]) }
+  func toJSON() -> [String: Any]? {
+    json([
+      "description": description,
+      "accessAccountCta": accessAccountCta,
+      "accountModalTitle": accountModalTitle,
+      "accountModalSecondaryCta": accountModalSecondaryCta,
+    ])
+  }
 }
 
 public struct FullShoppingLabels {
@@ -210,6 +220,9 @@ public struct FullShoppingCustomization {
   public var useCustomFont: Bool?
   public var walletSectionEnabled: Bool?
   public var transactionHistoryEnabled: Bool?
+  public var walletCtaColor: String?
+  public var walletCtaFontColor: String?
+  public var usePinataColors: Bool?
   public var attributes = RenterAttributes()
   public var labels = FullShoppingLabels()
   public var colorScheme = ColorScheme()
@@ -229,6 +242,9 @@ public struct FullShoppingCustomization {
       "useCustomFont": useCustomFont,
       "walletSectionEnabled": walletSectionEnabled,
       "transactionHistoryEnabled": transactionHistoryEnabled,
+      "walletCtaColor": walletCtaColor,
+      "walletCtaFontColor": walletCtaFontColor,
+      "usePinataColors": usePinataColors,
       "attributes": attributes.toJSON(),
       "labels": labels.toJSON(),
       "colorScheme": colorScheme.toJSON(),

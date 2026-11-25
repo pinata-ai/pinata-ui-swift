@@ -24,6 +24,29 @@ final class HostPageTests: XCTestCase {
     XCTAssertEqual(json["untypedKey"] as? Int, 1)
   }
 
+  func testExtraKeysInsideATypedObjectSurviveSoNewKeysNeedNoSDKUpdate() {
+    let json = HostPage.buildCustomization(
+      extra: ["labels": ["walletCard": ["newText": "from extra", "accessAccountCta": "from extra"]]],
+      component: [
+        "labels": [
+          "featured": ["title": "Featured"],
+          "walletCard": ["accessAccountCta": "from typed"],
+        ]
+      ],
+      eventMode: false, companyName: nil)
+    let walletCard = (json["labels"] as? [String: Any])?["walletCard"] as? [String: Any]
+
+    XCTAssertEqual(walletCard?["newText"] as? String, "from extra")
+    XCTAssertEqual(walletCard?["accessAccountCta"] as? String, "from typed")
+  }
+
+  func testATypedValueReplacesAnExtraObjectOfTheSameKey() {
+    let json = HostPage.buildCustomization(
+      extra: ["currency": ["a": 1]], component: ["currency": "pinata"], eventMode: false, companyName: nil)
+
+    XCTAssertEqual(json["currency"] as? String, "pinata")
+  }
+
   func testCompanyNamePropertyFillsOnlyWhenCustomizationMissesIt() {
     let fromTyped = HostPage.buildCustomization(
       extra: [:], component: ["companyName": "typed"], eventMode: true, companyName: "prop")

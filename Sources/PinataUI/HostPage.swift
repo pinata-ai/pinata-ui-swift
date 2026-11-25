@@ -13,11 +13,17 @@ enum HostPage {
     eventMode: Bool,
     companyName: String?
   ) -> [String: Any] {
-    var json = extra
-    component?.forEach { json[$0.key] = $0.value }
+    var json = mergeDeep(extra, component ?? [:])
     if eventMode { json["navigationMode"] = "events" }
     if let companyName, json["companyName"] == nil { json["companyName"] = companyName }
     return json
+  }
+
+  static func mergeDeep(_ base: [String: Any], _ other: [String: Any]) -> [String: Any] {
+    base.merging(other) { mine, theirs in
+      guard let mine = mine as? [String: Any], let theirs = theirs as? [String: Any] else { return theirs }
+      return mergeDeep(mine, theirs)
+    }
   }
 
   static func buildElementAttributes(
