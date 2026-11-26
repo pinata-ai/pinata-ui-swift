@@ -179,7 +179,10 @@ wallet.customization.ctaText = "Browse marketplace"
 wallet.customization.colorScheme.primaryColor = "#0055FF"
 ```
 
-Keys the SDK does not type yet go in `extraCustomization` (a `[String: Any]`). Typed fields win.
+Keys the SDK does not type yet go in `extraCustomization` (a `[String: Any]`), also inside nested
+objects such as `labels` or `colorScheme`. The two are merged key by key at every level, so a key
+added to the web component works without an SDK update. When both set the same key, the typed
+field wins.
 
 ## Good to know
 

@@ -67,6 +67,26 @@ final class CustomizationTests: XCTestCase {
     XCTAssertNil(labels["featured"])
   }
 
+  func testFullShoppingWalletCardTextsAndColorsUseTheWebKeys() throws {
+    var customization = FullShoppingCustomization()
+    customization.labels.walletCard.description = "Your points"
+    customization.labels.walletCard.accountModalTitle = "Leave Resident Rewards?"
+    customization.labels.walletCard.accountModalSecondaryCta = "Cancel"
+    customization.walletCtaColor = "#2E7D32"
+    customization.walletCtaFontColor = "#FFFFFF"
+    customization.usePinataColors = false
+    let json = customization.toJSON()
+    let labels = try XCTUnwrap(json["labels"] as? [String: Any])
+    let walletCard = try XCTUnwrap(labels["walletCard"] as? [String: Any])
+
+    XCTAssertEqual(walletCard["description"] as? String, "Your points")
+    XCTAssertEqual(walletCard["accountModalTitle"] as? String, "Leave Resident Rewards?")
+    XCTAssertEqual(walletCard["accountModalSecondaryCta"] as? String, "Cancel")
+    XCTAssertEqual(json["walletCtaColor"] as? String, "#2E7D32")
+    XCTAssertEqual(json["walletCtaFontColor"] as? String, "#FFFFFF")
+    XCTAssertEqual(json["usePinataColors"] as? Bool, false)
+  }
+
   func testRenterAttributesSerializeUnderAttributes() throws {
     var customization = PreviewCustomization()
     customization.attributes.zipCode = "33130"
